@@ -1,0 +1,18 @@
+.row {
+    display: flex;
+}
+.playAgainButton {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: greenyellow;
+    font-size: 2rem;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+}
