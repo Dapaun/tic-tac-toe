@@ -1,0 +1,3 @@
+{
+    "mongoURI": "mongodb+srv://user:grimriper@cluster0.yabyc.mongodb.net/expressDatabase?retryWrites=true"
+}
