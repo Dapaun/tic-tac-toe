@@ -23,3 +23,6 @@ app.use('/auth', auth);
 
 const port = 5000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
+
+
+// https://medium.com/@raj_36650/integrate-socket-io-with-node-js-express-2292ca13d891
