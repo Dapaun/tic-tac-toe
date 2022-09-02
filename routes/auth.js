@@ -5,6 +5,7 @@ const User = require('../models/User');
 const router = express.Router();
 
 router.post('/', (req,res) => {
+    console.log('GETS HERE')
     const {
         email,
         password,
@@ -35,10 +36,12 @@ router.post('/', (req,res) => {
 
 router.post('/userId', (req, res) => {
     const {
-        id,
+        userId,
     } = req.body;
-
-    User.findById(mongoose.Types.ObjectId(id))
+    console.log(
+        "GETS HERE AS WELL:", userId
+    );
+    User.findById(mongoose.Types.ObjectId(userId))
         .then(user => {
             if(!user) return res.status(400).json({msg: "User not found"});
             return res.status(200).json({

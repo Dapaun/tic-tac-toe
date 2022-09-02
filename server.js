@@ -26,3 +26,5 @@ app.listen(port, () => console.log(`Server started on port ${port}`));
 
 
 // https://medium.com/@raj_36650/integrate-socket-io-with-node-js-express-2292ca13d891
+
+// Next -> Use the endpoint to login with an existing user

@@ -1,6 +1,7 @@
 import Cell from "../Cell/Cell";
 import styles from "./Grid.module.scss";
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../../context/userContext";
 
 export enum PossibleValue {
     x = 'X',
@@ -12,6 +13,8 @@ const Grid = () => {
     const [gridArray, setGridArray] = React.useState(['', '', '', '', '', '', '', '', '']);
     const [gameHasEnded, setGameHasEnded] = React.useState(false);
     const [winner, setWinner] = React.useState<PossibleValue | undefined>();
+    const context = useContext(UserContext);
+    console.log('Context ',context);
 
     const validateGame = () => {
         if (
