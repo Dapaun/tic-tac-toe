@@ -14,7 +14,6 @@ const Grid = () => {
     const [gameHasEnded, setGameHasEnded] = React.useState(false);
     const [winner, setWinner] = React.useState<PossibleValue | undefined>();
     const context = useContext(UserContext);
-    console.log('Context ',context);
 
     const validateGame = () => {
         if (
