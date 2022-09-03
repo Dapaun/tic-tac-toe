@@ -25,11 +25,16 @@ let socketArray = [];
 
 io.on('connection',(socket)=> {
     console.log('client connected: ', socket.id)
-    socket.join('clock-room') // any room
+    // socket.join('clock-room') // any room
 
     socket.on('disconnect',()=>{
       socketArray = socketArray.filter(element => element.socketId !== socket.id )
       emitOnlineUsersList();
+    });
+
+    socket.on('data-update', () => {
+      console.log('DATA UPDATE for a single socket');
+      io.to(socket.id).emit('send-online-list', socketArray)
     });
 
     socket.on('send-user-data', (data) => {
@@ -42,9 +47,10 @@ io.on('connection',(socket)=> {
       if (!shouldAddToArray) {
       socketArray = [...socketArray, newSocketPair];
       emitOnlineUsersList();
+      socket.join(`${socket.user.id}`);
     }
     });
-
+    console.log('Room list ',  Array.from(socket.rooms));
     const emitOnlineUsersList = () => {
       // There must be a better way to bind props to sockets
       // Utill I find a better way I will use socketArray to
@@ -57,9 +63,9 @@ io.on('connection',(socket)=> {
   }  
 });
 
-  setInterval(()=>{
-    io.to('clock-room').emit('time', new Date());
-  },1000)
+  // setInterval(()=>{
+  //   io.to('clock-room').emit('time', new Date());
+  // },1000)
 
 //DB setup
 const db = config.get('mongoURI');
@@ -84,6 +90,6 @@ server.listen(port, err=> {
 //  socket + react
 // https://dev.to/bravemaster619/how-to-use-socket-io-client-correctly-in-react-app-o65
 
-// Display the list of online users (set some state for it)
-// Pick one user and start a room with him
+// Display the list of online users - style the component
+// Pick one user and start a room with him - already have a room for each one
 // FInd a better way to track logged users & modify socket props

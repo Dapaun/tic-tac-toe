@@ -11,7 +11,7 @@ export enum PossibleValue {
 
 const Grid = () => {
     // time example
-    const [time, setTime] = React.useState('fetching');
+    // const [time, setTime] = React.useState('fetching');
 
     const [nextValue, setNextValue] = React.useState<PossibleValue>(PossibleValue.x);
     const [gridArray, setGridArray] = React.useState(['', '', '', '', '', '', '', '', '']);
@@ -25,7 +25,7 @@ const Grid = () => {
     React.useEffect(() => {
         user && user.id && socket.emit('send-user-data', user);
         // time example
-        socket.on('time', (data: any) => setTime(data)); 
+        // socket.on('time', (data: any) => setTime(data)); 
     }, [socket, user]);
 
     React.useEffect(() => {
