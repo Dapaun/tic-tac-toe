@@ -2,26 +2,11 @@ import './App.css';
 import Router from './Routes';
 import { BrowserRouter } from 'react-router-dom';
 import UserContextProvider from './context/userContext';
-import React from 'react';
-import { io } from 'socket.io-client';
+import { SocketContext, socket } from './context/socketContext';
 
 function App() {
-  const [time, setTime] = React.useState('fetching');
-  const data = 'test';
-  React.useEffect(() => {
-    const socket = io('http://localhost:5000')
-    socket.on('connect', () => console.log('Your id is: ', socket.id));
-    socket.on('connect_error', () => {
-      setTimeout(() => socket.connect(), 5000)
-    })
-    socket.on('time', (data) => setTime(data))
-    socket.on('disconnect', () => setTime('server disconnected'))
-    socket.emit('send-user-data', data);
-  }, []);
-
   return (
-    <>
-    <div>The time {time}</div>
+    <SocketContext.Provider value={socket}>
       <UserContextProvider>
         <BrowserRouter>
           <div className="App">
@@ -29,7 +14,7 @@ function App() {
           </div>
         </BrowserRouter>
       </UserContextProvider>
-    </>
+    </SocketContext.Provider>
   );
 }
 

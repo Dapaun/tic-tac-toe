@@ -2,6 +2,7 @@ import Cell from "../Cell/Cell";
 import styles from "./Grid.module.scss";
 import React, { useContext } from "react";
 import { UserContext } from "../../context/userContext";
+import { SocketContext } from "../../context/socketContext";
 
 export enum PossibleValue {
     x = 'X',
@@ -9,11 +10,29 @@ export enum PossibleValue {
 }
 
 const Grid = () => {
+    // time example
+    const [time, setTime] = React.useState('fetching');
+
     const [nextValue, setNextValue] = React.useState<PossibleValue>(PossibleValue.x);
     const [gridArray, setGridArray] = React.useState(['', '', '', '', '', '', '', '', '']);
     const [gameHasEnded, setGameHasEnded] = React.useState(false);
     const [winner, setWinner] = React.useState<PossibleValue | undefined>();
-    const context = useContext(UserContext);
+    const {
+        user
+    } = useContext(UserContext);
+    const socket = useContext(SocketContext);
+
+    React.useEffect(() => {
+        user && user.id && socket.emit('send-user-data', user);
+        // time example
+        socket.on('time', (data: any) => setTime(data)); 
+    }, [socket, user]);
+
+    React.useEffect(() => {
+        socket.on('send-online-list', (data: any) => {
+            console.log('DATA ', data, 'socket id ', socket.id);
+        });
+    }, [socket]);
 
     const validateGame = () => {
         if (
