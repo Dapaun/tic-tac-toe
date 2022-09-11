@@ -3,6 +3,7 @@ import styles from "./Grid.module.scss";
 import React, { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import { SocketContext } from "../../context/socketContext";
+import UsersList from "../UsersList/UsersList";
 
 export enum PossibleValue {
     x = 'X',
@@ -32,6 +33,13 @@ const Grid = () => {
         socket.on('send-online-list', (data: any) => {
             console.log('DATA ', data, 'socket id ', socket.id);
         });
+    }, [socket]);
+
+    React.useEffect(() => {
+        socket.on('challenged', (message: string, challangerUserRoom: string) => {
+            console.log('MESSAGE - ', message);
+            console.log('challangerUserRoom', challangerUserRoom);
+        })
     }, [socket]);
 
     const validateGame = () => {
@@ -88,7 +96,7 @@ const Grid = () => {
                     <Cell id={8} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
                 </div>
             </div>
-
+            <UsersList className='fixed' />
             {gameHasEnded &&
                 <button className={styles.playAgainButton} onClick={handleTryAgain}>
                     Play again?

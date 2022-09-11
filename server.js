@@ -55,17 +55,14 @@ io.on('connection',(socket)=> {
       // There must be a better way to bind props to sockets
       // Utill I find a better way I will use socketArray to
       // save all the sockets
-
-    //     return io.sockets.emit('send-online-list', 
-    //   Array.from(io.sockets.sockets).map(socket => socket[0])
-    // );
     return io.sockets.emit('send-online-list', socketArray);
-  }  
+  } 
+    socket.on('challenge', (challengedUserRoom, challangerUserRoom, challengerName) => {
+      const message = `Player ${challangerUserRoom} (${challengerName}), challenged you - ${challengedUserRoom}`;
+      console.log(message);
+      socket.to(challengedUserRoom).emit('challenged', message, challangerUserRoom);
+    }) 
 });
-
-  // setInterval(()=>{
-  //   io.to('clock-room').emit('time', new Date());
-  // },1000)
 
 //DB setup
 const db = config.get('mongoURI');
@@ -90,6 +87,7 @@ server.listen(port, err=> {
 //  socket + react
 // https://dev.to/bravemaster619/how-to-use-socket-io-client-correctly-in-react-app-o65
 
-// Display the list of online users - style the component
-// Pick one user and start a room with him - already have a room for each one
+// Create a modal after the emit message is recived (need some state and the react component)
+// Display modal after the emit, click on accept to start and display the grid
+// Two messages when emiiting challenge request, fix to only one
 // FInd a better way to track logged users & modify socket props

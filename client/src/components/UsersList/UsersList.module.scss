@@ -1,0 +1,34 @@
+.fixed {
+    position: fixed;
+    top: 5%;
+    right: 5%;
+    .listWrapper {
+        :last-child {
+            border-bottom: 1px solid;
+            padding-bottom: 20px;
+        }
+    }
+    .userListWrapper {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border-top: 1px solid;
+        .challengeButton {
+            padding: 4px;
+            border: none;
+            background: #86c686;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            &:hover {
+                transform: scale(2);
+                transition-duration: 1s;
+                transition-timing-function: ease;
+            }
+        }
+        .userName {
+            width: 200px;
+            overflow-wrap: anywhere;
+        }
+    }
+
+}
