@@ -1,0 +1,43 @@
+.modalContainer {
+    width: 300px;
+    height: 200px;
+    background-color: beige;
+    border-radius: 5px;
+    z-index: 100;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    padding: 15px;
+    .acceptButton {
+        margin: 5px;
+        background: darkseagreen;
+        border: none;
+        padding: 7px;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        opacity: 0.8;
+        &:hover {
+            opacity: 1;
+        }
+    }
+    .declineButton {
+        margin: 5px;
+        background: #dc5636;
+        border: none;
+        padding: 7px;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        opacity: 0.8;
+        &:hover {
+            opacity: 1;
+        }
+    }
+}

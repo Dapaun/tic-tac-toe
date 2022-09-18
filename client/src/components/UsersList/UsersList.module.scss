@@ -2,6 +2,7 @@
     position: fixed;
     top: 5%;
     right: 5%;
+    min-width: 300px;
     .listWrapper {
         :last-child {
             border-bottom: 1px solid;
@@ -24,11 +25,22 @@
                 transition-duration: 1s;
                 transition-timing-function: ease;
             }
+            &:disabled {
+                background: gray;
+                cursor: wait;
+            }
         }
         .userName {
             width: 200px;
             overflow-wrap: anywhere;
+            margin: 0 auto;
+            display: block;
+            margin-bottom: 15px;
         }
+        .timerMessage {
+            border-bottom: none;
+        }
+
     }
 
 }

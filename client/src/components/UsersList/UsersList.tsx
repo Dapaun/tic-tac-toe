@@ -13,6 +13,8 @@ const UsersList = (props: any) => {
     const socket = useContext(SocketContext);
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
+    const [challengedUser, setChallengedUser] = React.useState<string>('');
+    const [timer, setTimer] = React.useState<number | undefined>();
 
     // maybe move this inside the context? same for the users list
     React.useEffect(() => {
@@ -20,21 +22,35 @@ const UsersList = (props: any) => {
     }, [socket, user]);
 
     React.useEffect(() => {
-        console.log('HOOK');
         socket.emit('data-update');
         socket.on('send-online-list', (data: any) => {
             console.log('DATA ', data, 'socket id ', socket.id);
             setUsersList(data);
         });
     }, [socket, navigate]);
+
     console.log('locl user ', user);
     console.log('Users list ', usersList);
     const handleChallenge = (challengedUserRoom: string) => {
         console.log(
             `Challenged user ${challengedUserRoom}`
         );
-        socket.emit('challenge', challengedUserRoom, socket.id, `${user.firstName} ${user.lastName}` );
-    } 
+        setChallengedUser(challengedUserRoom);
+        setTimer(10);
+        socket.emit('challenge', challengedUserRoom, socket.id, `${user.firstName} ${user.lastName}`);
+    };
+
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            setTimer(timer as any - 1);
+        }, 1000);
+
+        if (timer && timer <= 0) {
+            setTimer(undefined);
+        }
+        return () => clearInterval(interval);
+    }, [timer]);
+
     return (
         <div className={styles[className]}>
             <h3>Online users</h3>
@@ -43,9 +59,13 @@ const UsersList = (props: any) => {
                     user && user.id !== userData.user.id &&
                     <div className={styles.userListWrapper}>
                         <p className={styles.userName}>{userData.user.firstName} {userData.user.lastName}</p>
-                        <button className={styles.challengeButton} onClick={() => handleChallenge(userData.socketId)}>
+                        <button disabled={!!timer} className={styles.challengeButton} onClick={() => handleChallenge(userData.socketId)}>
                             Challenge!
                         </button>
+                        {!!timer && 
+                        <p className={styles.timerMessage}>
+                            The challenge will expire in {timer} seconds
+                        </p>}
                     </div>
                 )}
             </div>

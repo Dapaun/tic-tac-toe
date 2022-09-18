@@ -22,10 +22,11 @@ const io = socketIo(server,{
 }) //in case server and client run on different urls
 
 let socketArray = [];
+let challengeTimeArray = [];
 
 io.on('connection',(socket)=> {
     console.log('client connected: ', socket.id)
-    // socket.join('clock-room') // any room
+    socket.join(socket.id) // any room
 
     socket.on('disconnect',()=>{
       socketArray = socketArray.filter(element => element.socketId !== socket.id )
@@ -58,10 +59,27 @@ io.on('connection',(socket)=> {
     return io.sockets.emit('send-online-list', socketArray);
   } 
     socket.on('challenge', (challengedUserRoom, challangerUserRoom, challengerName) => {
-      const message = `Player ${challangerUserRoom} (${challengerName}), challenged you - ${challengedUserRoom}`;
+      // const message = `Player ${challangerUserRoom} (${challengerName}), challenged you - ${challengedUserRoom}`;
+      const message = `Player ${challengerName} challenged you to a match!`;
+      // Maybe do this some other time
+      // challengeTimeArray = [...challengeTimeArray, {
+      //   challenger: challangerUserRoom,
+      //   challenged: challengedUserRoom,
+      // }];
       console.log(message);
       socket.to(challengedUserRoom).emit('challenged', message, challangerUserRoom);
-    }) 
+    });
+
+    socket.on('challengeAccepted', (challengedUserRoom, challangerUserRoom) => {
+      socket.join(challangerUserRoom);
+      console.log('Socket ', socket.id ,' Joined the room ', challangerUserRoom);
+      // const sockets = await io.in("room1").fetchSockets();
+      // might need that challengeTimeArray
+      let gridArray = ['','','','','','','','',''];
+      return socket.to(challangerUserRoom).emit('gameStart', challengedUserRoom, challangerUserRoom, gridArray);
+    });
+
+    
 });
 
 //DB setup
@@ -87,7 +105,9 @@ server.listen(port, err=> {
 //  socket + react
 // https://dev.to/bravemaster619/how-to-use-socket-io-client-correctly-in-react-app-o65
 
-// Create a modal after the emit message is recived (need some state and the react component)
-// Display modal after the emit, click on accept to start and display the grid
+// There is something wron when emitting the challengeAccepted event, 
+// the game start event is sent only to the challenger, not the challenged after joining that room
+// Maybe need a new room just for testing, ex game-room? 
+
 // Two messages when emiiting challenge request, fix to only one
 // FInd a better way to track logged users & modify socket props

@@ -4,6 +4,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import { SocketContext } from "../../context/socketContext";
 import UsersList from "../UsersList/UsersList";
+import Modal from "../Modal/Modal";
 
 export enum PossibleValue {
     x = 'X',
@@ -11,8 +12,6 @@ export enum PossibleValue {
 }
 
 const Grid = () => {
-    // time example
-    // const [time, setTime] = React.useState('fetching');
 
     const [nextValue, setNextValue] = React.useState<PossibleValue>(PossibleValue.x);
     const [gridArray, setGridArray] = React.useState(['', '', '', '', '', '', '', '', '']);
@@ -22,11 +21,12 @@ const Grid = () => {
         user
     } = useContext(UserContext);
     const socket = useContext(SocketContext);
+    const [showModal, setShowModal] = React.useState<boolean>(false);
+    const [challengeMessage, setChallengeMessage] = React.useState<string>('');
+    const [challengerRoom, setChallengerRoom] = React.useState<string>('');
 
     React.useEffect(() => {
         user && user.id && socket.emit('send-user-data', user);
-        // time example
-        // socket.on('time', (data: any) => setTime(data)); 
     }, [socket, user]);
 
     React.useEffect(() => {
@@ -37,8 +37,20 @@ const Grid = () => {
 
     React.useEffect(() => {
         socket.on('challenged', (message: string, challangerUserRoom: string) => {
+            setChallengeMessage(message);
+            setChallengerRoom(challangerUserRoom);
+            setShowModal(true);
             console.log('MESSAGE - ', message);
             console.log('challangerUserRoom', challangerUserRoom);
+        })
+    }, [socket]);
+
+    React.useEffect(() => {
+        socket.on('gameStart', (challenger: string, challenged: string, gridArray: []) => {
+            console.log('GAME STARTED ');
+            console.log('Challenger ', challenger);
+            console.log('Challenged ', challenged);
+            console.log('Grid ', gridArray);
         })
     }, [socket]);
 
@@ -97,6 +109,7 @@ const Grid = () => {
                 </div>
             </div>
             <UsersList className='fixed' />
+            {showModal && <Modal message={challengeMessage} room={challengerRoom}/>}
             {gameHasEnded &&
                 <button className={styles.playAgainButton} onClick={handleTryAgain}>
                     Play again?
