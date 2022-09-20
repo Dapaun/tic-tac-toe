@@ -73,10 +73,8 @@ io.on('connection',(socket)=> {
     socket.on('challengeAccepted', (challengedUserRoom, challangerUserRoom) => {
       socket.join(challangerUserRoom);
       console.log('Socket ', socket.id ,' Joined the room ', challangerUserRoom);
-      // const sockets = await io.in("room1").fetchSockets();
-      // might need that challengeTimeArray
       let gridArray = ['','','','','','','','',''];
-      return socket.to(challangerUserRoom).emit('gameStart', challengedUserRoom, challangerUserRoom, gridArray);
+      io.to(challangerUserRoom).emit('gameStart', challengedUserRoom, challangerUserRoom, gridArray);
     });
 
     
@@ -105,9 +103,14 @@ server.listen(port, err=> {
 //  socket + react
 // https://dev.to/bravemaster619/how-to-use-socket-io-client-correctly-in-react-app-o65
 
-// There is something wron when emitting the challengeAccepted event, 
-// the game start event is sent only to the challenger, not the challenged after joining that room
-// Maybe need a new room just for testing, ex game-room? 
+  // TODO 
+// will assume that the challenger has the ability to start a game for now in (Grid.tsx)
+// Will do an emmit in Cell.tsx after the move,
+// After that, do a new emit on the server with the new values (maybe to both) - grid etc
+// Allow after that the other player to do a move
+
+// Will need to exptand socket context to know the challenger
+// ALso will need a grid context
 
 // Two messages when emiiting challenge request, fix to only one
 // FInd a better way to track logged users & modify socket props

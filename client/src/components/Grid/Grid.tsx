@@ -24,6 +24,8 @@ const Grid = () => {
     const [showModal, setShowModal] = React.useState<boolean>(false);
     const [challengeMessage, setChallengeMessage] = React.useState<string>('');
     const [challengerRoom, setChallengerRoom] = React.useState<string>('');
+    const [canInput, setCanInput] = React.useState<boolean>(false);
+    const [enemy, setEnemy] = React.useState('');
 
     React.useEffect(() => {
         user && user.id && socket.emit('send-user-data', user);
@@ -46,12 +48,17 @@ const Grid = () => {
     }, [socket]);
 
     React.useEffect(() => {
-        socket.on('gameStart', (challenger: string, challenged: string, gridArray: []) => {
-            console.log('GAME STARTED ');
-            console.log('Challenger ', challenger);
-            console.log('Challenged ', challenged);
-            console.log('Grid ', gridArray);
-        })
+        // will assume that the challenger has the ability to start a game for now
+        socket.on('gameStart', (challenged: string, challenger: string,  gridArray: []) => {
+            setGridArray(gridArray);
+            if (socket.id === challenger) {
+                setCanInput(true);
+                setEnemy(challenged);
+            } else {
+                setCanInput(false);
+                setEnemy(challenger);
+            }
+        });
     }, [socket]);
 
     const validateGame = () => {
@@ -93,19 +100,19 @@ const Grid = () => {
             {gameHasEnded && !winner && <h2> Draw, try another match! </h2>}
             <div className={styles.table}>
                 <div className={styles.row}>
-                    <Cell id={0} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                    <Cell id={1} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                    <Cell id={2} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={0} canInput={canInput} setCanInput={setCanInput}  nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={1} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                    <Cell gridArray={gridArray} enemyPlayer={enemy} id ={2} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
                 </div>
                 <div className={styles.row}>
-                    <Cell id={3} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                    <Cell id={4} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                    <Cell id={5} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={3} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={4} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={5} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
                 </div>
                 <div className={styles.row}>
-                    <Cell id={6} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                    <Cell id={7} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                    <Cell id={8} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={6} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={7} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={8} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
                 </div>
             </div>
             <UsersList className='fixed' />
