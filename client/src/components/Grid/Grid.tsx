@@ -26,39 +26,47 @@ const Grid = () => {
     const [challengerRoom, setChallengerRoom] = React.useState<string>('');
     const [canInput, setCanInput] = React.useState<boolean>(false);
     const [enemy, setEnemy] = React.useState('');
+    const [displayGrid, setDisplayGrid] = React.useState<boolean>(false);
+    const [enemyName, setEnemyName] = React.useState<string>('');
 
     React.useEffect(() => {
         user && user.id && socket.emit('send-user-data', user);
     }, [socket, user]);
 
     React.useEffect(() => {
-        socket.on('send-online-list', (data: any) => {
-            console.log('DATA ', data, 'socket id ', socket.id);
-        });
-    }, [socket]);
-
-    React.useEffect(() => {
-        socket.on('challenged', (message: string, challangerUserRoom: string) => {
+        socket.on('challenged', (message: string, challangerUserRoom: string, challengerName: string) => {
             setChallengeMessage(message);
             setChallengerRoom(challangerUserRoom);
             setShowModal(true);
-            console.log('MESSAGE - ', message);
-            console.log('challangerUserRoom', challangerUserRoom);
+            setEnemyName(challengerName);
         })
     }, [socket]);
 
     React.useEffect(() => {
         // will assume that the challenger has the ability to start a game for now
-        socket.on('gameStart', (challenged: string, challenger: string,  gridArray: []) => {
-            setGridArray(gridArray);
-            if (socket.id === challenger) {
-                setCanInput(true);
-                setEnemy(challenged);
-            } else {
-                setCanInput(false);
-                setEnemy(challenger);
+        console.log('Game start');
+        socket.on('gameStart', (challenged: string, challenger: string, gridArray: [], canStartGame: boolean) => {
+            setDisplayGrid(true);
+            if (canStartGame) {
+                setGridArray(gridArray);
+                if (socket.id === challenger) {
+                    setCanInput(true);
+                    setEnemy(challenged);
+                } else {
+                    setCanInput(false);
+                    setEnemy(challenger);
+                }
             }
         });
+    }, [socket]);
+
+    React.useEffect(() => {
+        socket.on('dataSync', (gridArray: [], enemy: string, currentPlayer: string, value: PossibleValue) => {
+            setGridArray(gridArray);
+            setEnemy(enemy);
+            setNextValue(value);
+            setCanInput(true);
+        })
     }, [socket]);
 
     const validateGame = () => {
@@ -96,31 +104,42 @@ const Grid = () => {
 
     return (
         <>
-            {winner && <h2>Player {winner} has won!</h2>}
-            {gameHasEnded && !winner && <h2> Draw, try another match! </h2>}
-            <div className={styles.table}>
-                <div className={styles.row}>
-                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={0} canInput={canInput} setCanInput={setCanInput}  nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={1} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                    <Cell gridArray={gridArray} enemyPlayer={enemy} id ={2} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+            {displayGrid && <div>
+                {winner &&
+                    <h2>
+                        {canInput === true ? 'You lost, beeter luck next time!' : 'You win! Congrats!'}
+                    </h2>
+                }
+                {gameHasEnded && !winner && <h2> Draw, try another match! </h2>}
+                {!gameHasEnded && 
+                    <h2>
+                        {canInput === true ? 'Make your move!' : `Waiting for ${enemyName}'s move`}
+                    </h2>
+                }
+                <div className={styles.table}>
+                    <div className={styles.row}>
+                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={0} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={1} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={2} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                    </div>
+                    <div className={styles.row}>
+                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={3} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={4} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={5} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                    </div>
+                    <div className={styles.row}>
+                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={6} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={7} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={8} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                    </div>
                 </div>
-                <div className={styles.row}>
-                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={3} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={4} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={5} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                </div>
-                <div className={styles.row}>
-                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={6} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={7} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                    <Cell gridArray={gridArray} enemyPlayer={enemy} id={8} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                </div>
-            </div>
-            <UsersList className='fixed' />
-            {showModal && <Modal message={challengeMessage} room={challengerRoom}/>}
-            {gameHasEnded &&
-                <button className={styles.playAgainButton} onClick={handleTryAgain}>
-                    Play again?
-                </button>}
+                {gameHasEnded &&
+                    <button className={styles.playAgainButton} onClick={handleTryAgain}>
+                        Play again?
+                    </button>}
+            </div>}
+            <UsersList className='fixed' setEnemyName={setEnemyName} />
+            {showModal && <Modal message={challengeMessage} room={challengerRoom} />}
         </>
 
     )

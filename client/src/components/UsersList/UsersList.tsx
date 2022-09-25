@@ -4,16 +4,21 @@ import { UserContext } from "../../context/userContext";
 import { useNavigate } from 'react-router-dom';
 import styles from './UsersList.module.scss';
 
-const UsersList = (props: any) => {
+interface UserListProps {
+    setEnemyName?: any;
+    className: string;
+}
+
+const UsersList = (props: UserListProps) => {
     const {
-        className
+        className,
+        setEnemyName,
     } = props;
 
     const [usersList, setUsersList] = React.useState([]);
     const socket = useContext(SocketContext);
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
-    const [challengedUser, setChallengedUser] = React.useState<string>('');
     const [timer, setTimer] = React.useState<number | undefined>();
 
     // maybe move this inside the context? same for the users list
@@ -31,13 +36,10 @@ const UsersList = (props: any) => {
 
     console.log('locl user ', user);
     console.log('Users list ', usersList);
-    const handleChallenge = (challengedUserRoom: string) => {
-        console.log(
-            `Challenged user ${challengedUserRoom}`
-        );
-        setChallengedUser(challengedUserRoom);
+    const handleChallenge = (userData: any) => {
+        setEnemyName(userData.user.firstName + userData.user.lastName);
         setTimer(10);
-        socket.emit('challenge', challengedUserRoom, socket.id, `${user.firstName} ${user.lastName}`);
+        socket.emit('challenge', userData.socketId, socket.id, `${user.firstName} ${user.lastName}`);
     };
 
     React.useEffect(() => {
@@ -59,7 +61,7 @@ const UsersList = (props: any) => {
                     user && user.id !== userData.user.id &&
                     <div className={styles.userListWrapper}>
                         <p className={styles.userName}>{userData.user.firstName} {userData.user.lastName}</p>
-                        <button disabled={!!timer} className={styles.challengeButton} onClick={() => handleChallenge(userData.socketId)}>
+                        <button disabled={!!timer} className={styles.challengeButton} onClick={() => handleChallenge(userData)}>
                             Challenge!
                         </button>
                         {!!timer && 

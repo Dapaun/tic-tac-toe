@@ -67,15 +67,22 @@ io.on('connection',(socket)=> {
       //   challenged: challengedUserRoom,
       // }];
       console.log(message);
-      socket.to(challengedUserRoom).emit('challenged', message, challangerUserRoom);
+      socket.to(challengedUserRoom).emit('challenged', message, challangerUserRoom, challengerName);
     });
 
     socket.on('challengeAccepted', (challengedUserRoom, challangerUserRoom) => {
-      socket.join(challangerUserRoom);
+      // No need for joining and sending data just to a room, will have both tooms on emits
+      // socket.join(challangerUserRoom);
       console.log('Socket ', socket.id ,' Joined the room ', challangerUserRoom);
       let gridArray = ['','','','','','','','',''];
-      io.to(challangerUserRoom).emit('gameStart', challengedUserRoom, challangerUserRoom, gridArray);
+      io.to(challangerUserRoom).emit('gameStart', challengedUserRoom, challangerUserRoom, gridArray, true);
+      io.to(challengedUserRoom).emit('gameStart', challengedUserRoom, challangerUserRoom, gridArray, false);
+
     });
+
+    socket.on('insertedValue', (gridArray, currentPlayer, nextPlayer, value) => {
+      socket.to(nextPlayer).emit('dataSync', gridArray, currentPlayer, nextPlayer, value)
+    })
 
     
 });

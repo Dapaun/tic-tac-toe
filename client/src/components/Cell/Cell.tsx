@@ -29,23 +29,18 @@ const Cell = (props: CellInterface) => {
 
     } = props;
 
-    const [hasClickedOnCell, setHasClickedOnCell] = React.useState<boolean>(false); 
-    const [cellValue, setCellValue] = React.useState<PossibleValue>();
     const socket = useContext(SocketContext);
-
     const handleClick = () => {
-        if (canInput && !hasClickedOnCell && !gameHasEnded) {
-            setHasClickedOnCell(true);
-            setCellValue(nextValue);
+        if (canInput && !gameHasEnded && gridArray[id] === '') {
             setGridValue(id, nextValue);
             nextValue === PossibleValue.x ? setNextValue(PossibleValue.o) : setNextValue(PossibleValue.x);
             setCanInput(false);
-            // socket.emit('insertedValue', gridArray, CurrentPlayer: socket.id, ChallengerPlayer: otherID, currentValue: x|o)
+            socket.emit('insertedValue', gridArray, socket.id, enemyPlayer, nextValue === PossibleValue.x ? PossibleValue.o : PossibleValue.x);
         }
     }
     return (
         <div className={styles.cell} onClick={handleClick}>
-         {hasClickedOnCell && cellValue}
+            {gridArray[id]}
         </div>
     )
 }
