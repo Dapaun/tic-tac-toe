@@ -22,13 +22,12 @@ const io = socketIo(server,{
 }) //in case server and client run on different urls
 
 let socketArray = [];
-let challengeTimeArray = [];
 
 io.on('connection',(socket)=> {
     console.log('client connected: ', socket.id)
     socket.join(socket.id) // any room
 
-    socket.on('disconnect',()=>{
+    socket.on('disconnect',()=> {
       socketArray = socketArray.filter(element => element.socketId !== socket.id )
       emitOnlineUsersList();
     });
@@ -102,22 +101,4 @@ const port = 5000;
 server.listen(port, err=> {
     if(err) console.log(err)
     console.log('Server running on Port ', port)
-  })
-
-// basic express + socket 
-// https://medium.com/@raj_36650/integrate-socket-io-with-node-js-express-2292ca13d891
-
-//  socket + react
-// https://dev.to/bravemaster619/how-to-use-socket-io-client-correctly-in-react-app-o65
-
-  // TODO 
-// will assume that the challenger has the ability to start a game for now in (Grid.tsx)
-// Will do an emmit in Cell.tsx after the move,
-// After that, do a new emit on the server with the new values (maybe to both) - grid etc
-// Allow after that the other player to do a move
-
-// Will need to exptand socket context to know the challenger
-// ALso will need a grid context
-
-// Two messages when emiiting challenge request, fix to only one
-// FInd a better way to track logged users & modify socket props
+  });

@@ -5,6 +5,7 @@ import { UserContext } from "../../context/userContext";
 import { SocketContext } from "../../context/socketContext";
 import UsersList from "../UsersList/UsersList";
 import Modal from "../Modal/Modal";
+import { GameContext } from "../../context/gameContext";
 
 export enum PossibleValue {
     x = 'X',
@@ -12,16 +13,26 @@ export enum PossibleValue {
 }
 
 const Grid = () => {
-
-    const [nextValue, setNextValue] = React.useState<PossibleValue>(PossibleValue.x);
-    const [gridArray, setGridArray] = React.useState(['', '', '', '', '', '', '', '', '']);
-    const [gameHasEnded, setGameHasEnded] = React.useState(false);
-    const [winner, setWinner] = React.useState<PossibleValue | undefined>();
     const {
         user
     } = useContext(UserContext);
+
+    const {
+        nextValue,
+        setNextValue,
+        gridArray,
+        setGridArray,
+        gameHasEnded,
+        setGameHasEnded,
+        showModal,
+        setShowModal,
+    } = useContext(GameContext);
+
+    // const [gameHasEnded, setGameHasEnded] = React.useState(false);
+    const [winner, setWinner] = React.useState<PossibleValue | undefined>();
+
     const socket = useContext(SocketContext);
-    const [showModal, setShowModal] = React.useState<boolean>(false);
+    // const [showModal, setShowModal] = React.useState<boolean>(false);
     const [challengeMessage, setChallengeMessage] = React.useState<string>('');
     const [challengerRoom, setChallengerRoom] = React.useState<string>('');
     const [canInput, setCanInput] = React.useState<boolean>(false);
@@ -122,19 +133,19 @@ const Grid = () => {
                 }
                 <div className={styles.table}>
                     <div className={styles.row}>
-                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={0} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={1} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={2} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                        <Cell  enemyPlayer={enemy} id={0} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
+                        <Cell  enemyPlayer={enemy} id={1} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
+                        <Cell  enemyPlayer={enemy} id={2} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
                     </div>
                     <div className={styles.row}>
-                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={3} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={4} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={5} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                        <Cell  enemyPlayer={enemy} id={3} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
+                        <Cell  enemyPlayer={enemy} id={4} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
+                        <Cell  enemyPlayer={enemy} id={5} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
                     </div>
                     <div className={styles.row}>
-                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={6} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={7} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
-                        <Cell gridArray={gridArray} enemyPlayer={enemy} id={8} canInput={canInput} setCanInput={setCanInput} nextValue={nextValue} setNextValue={setNextValue} setGridValue={setGridValue} gameHasEnded={gameHasEnded} />
+                        <Cell  enemyPlayer={enemy} id={6} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
+                        <Cell  enemyPlayer={enemy} id={7} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
+                        <Cell  enemyPlayer={enemy} id={8} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
                     </div>
                 </div>
                 {gameHasEnded &&
@@ -142,7 +153,7 @@ const Grid = () => {
                         Play again?
                     </button>}
             </div>}
-            <UsersList className='fixed' setEnemyName={setEnemyName} gameHasStarted={gameHasStarted} showModal={showModal}/>
+            <UsersList className='fixed' setEnemyName={setEnemyName} gameHasStarted={gameHasStarted} />
             {showModal && <Modal message={challengeMessage} room={challengerRoom} />}
         </>
 

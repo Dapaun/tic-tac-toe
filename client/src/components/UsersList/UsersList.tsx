@@ -3,12 +3,12 @@ import React, { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import { useNavigate } from 'react-router-dom';
 import styles from './UsersList.module.scss';
+import { GameContext } from "../../context/gameContext";
 
 interface UserListProps {
     setEnemyName?: any;
     className: string;
     gameHasStarted?: boolean;
-    showModal?: boolean;
 }
 
 const UsersList = (props: UserListProps) => {
@@ -16,8 +16,11 @@ const UsersList = (props: UserListProps) => {
         className,
         setEnemyName,
         gameHasStarted,
-        showModal,
     } = props;
+
+    const {
+        showModal,
+    } = useContext(GameContext);
 
     const [usersList, setUsersList] = React.useState([]);
     const socket = useContext(SocketContext);

@@ -2,32 +2,31 @@ import { useContext } from "react";
 import { PossibleValue } from "../Grid/Grid";
 import styles from "./Cell.module.scss";
 import { SocketContext } from "../../context/socketContext";
+import { GameContext } from "../../context/gameContext";
 
 interface CellInterface {
     id: number;
-    nextValue: PossibleValue;
-    gameHasEnded: boolean;
-    setNextValue: any;
     setGridValue: any;
     canInput: boolean;
     setCanInput: any;
-    gridArray: any;
     enemyPlayer: string;
 }
 
 const Cell = (props: CellInterface) => {
     const {
         id,
-        nextValue,
-        setNextValue,
         setGridValue,
-        gameHasEnded,
         canInput,
         setCanInput,
-        gridArray,
         enemyPlayer,
-
     } = props;
+
+    const {
+        nextValue,
+        setNextValue,
+        gridArray,
+        gameHasEnded,
+    } = useContext(GameContext);
 
     const socket = useContext(SocketContext);
     const handleClick = () => {

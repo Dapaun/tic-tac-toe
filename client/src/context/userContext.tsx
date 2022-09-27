@@ -43,7 +43,6 @@ const UserContextProvider = (props: any) => {
         }
       }, []);
       const changeAuthenticationStatus = (user ?: any) => {
-        console.log('Gets here?');
         isAuthenticated ? setUser(null) : setUser(user);
         setIsAuthenticated(!isAuthenticated);
         user && localStorage.setItem('user', user.id);
