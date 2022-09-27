@@ -7,12 +7,16 @@ import styles from './UsersList.module.scss';
 interface UserListProps {
     setEnemyName?: any;
     className: string;
+    gameHasStarted?: boolean;
+    showModal?: boolean;
 }
 
 const UsersList = (props: UserListProps) => {
     const {
         className,
         setEnemyName,
+        gameHasStarted,
+        showModal,
     } = props;
 
     const [usersList, setUsersList] = React.useState([]);
@@ -34,7 +38,14 @@ const UsersList = (props: UserListProps) => {
         });
     }, [socket, navigate]);
 
-    console.log('locl user ', user);
+    
+    React.useEffect(() => {
+        socket.on('gameStart', () => {
+            setTimer(undefined);
+        });
+    }, [socket]);
+
+    console.log('local user ', user);
     console.log('Users list ', usersList);
     const handleChallenge = (userData: any) => {
         setEnemyName(userData.user.firstName + userData.user.lastName);
@@ -61,9 +72,9 @@ const UsersList = (props: UserListProps) => {
                     user && user.id !== userData.user.id &&
                     <div className={styles.userListWrapper}>
                         <p className={styles.userName}>{userData.user.firstName} {userData.user.lastName}</p>
-                        <button disabled={!!timer} className={styles.challengeButton} onClick={() => handleChallenge(userData)}>
+                        {(!showModal && !gameHasStarted) && <button disabled={!!timer} className={styles.challengeButton} onClick={() => handleChallenge(userData)}>
                             Challenge!
-                        </button>
+                        </button>}
                         {!!timer && 
                         <p className={styles.timerMessage}>
                             The challenge will expire in {timer} seconds

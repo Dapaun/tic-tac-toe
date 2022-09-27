@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { PossibleValue } from "../Grid/Grid";
 import styles from "./Cell.module.scss";
 import { SocketContext } from "../../context/socketContext";

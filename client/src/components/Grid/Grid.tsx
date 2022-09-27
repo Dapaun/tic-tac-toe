@@ -27,6 +27,7 @@ const Grid = () => {
     const [canInput, setCanInput] = React.useState<boolean>(false);
     const [enemy, setEnemy] = React.useState('');
     const [displayGrid, setDisplayGrid] = React.useState<boolean>(false);
+    const [gameHasStarted, setGameHasStarted] = React.useState<boolean>(false)
     const [enemyName, setEnemyName] = React.useState<string>('');
 
     React.useEffect(() => {
@@ -47,6 +48,7 @@ const Grid = () => {
         console.log('Game start');
         socket.on('gameStart', (challenged: string, challenger: string, gridArray: [], canStartGame: boolean) => {
             setDisplayGrid(true);
+            setGameHasStarted(true);
             if (canStartGame) {
                 setGridArray(gridArray);
                 if (socket.id === challenger) {
@@ -81,10 +83,12 @@ const Grid = () => {
             (gridArray[2] === gridArray[4] && gridArray[6] === gridArray[2] && gridArray[2])
         ) {
             setGameHasEnded(true);
+            setGameHasStarted(false);
             setWinner(nextValue === PossibleValue.o ? PossibleValue.x : PossibleValue.o);
         } else {
             if (gridArray.every(element => element === PossibleValue.o || element === PossibleValue.x)) {
-                setGameHasEnded(true)
+                setGameHasEnded(true);
+                setGameHasStarted(false);
             }
         }
     }
@@ -138,7 +142,7 @@ const Grid = () => {
                         Play again?
                     </button>}
             </div>}
-            <UsersList className='fixed' setEnemyName={setEnemyName} />
+            <UsersList className='fixed' setEnemyName={setEnemyName} gameHasStarted={gameHasStarted} showModal={showModal}/>
             {showModal && <Modal message={challengeMessage} room={challengerRoom} />}
         </>
 
