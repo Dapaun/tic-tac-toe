@@ -1,20 +1,22 @@
 import React, { useContext } from 'react';
 import styles from './Modal.module.scss';
 import { SocketContext } from "../../context/socketContext";
+import { GameContext } from '../../context/gameContext';
 
 
 interface ModalProps {
     message: string;
-    room: string;
 }
 
 const Modal = (props: ModalProps) => {
     const {
         message,
-        room,
     } = props;
     const [timer, setTimer] = React.useState<number | undefined>(10);
     const socket = useContext(SocketContext);
+    const {
+        challengerRoom,
+    } = useContext(GameContext);
 
     React.useEffect(() => {
         const interval = setInterval(() => {
@@ -32,7 +34,7 @@ const Modal = (props: ModalProps) => {
     }
 
     const handleAccept = () => {
-        socket.emit('challengeAccepted', socket.id, room );
+        socket.emit('challengeAccepted', socket.id, challengerRoom );
         setTimer(undefined);
     }
 

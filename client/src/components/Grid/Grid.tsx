@@ -26,20 +26,20 @@ const Grid = () => {
         setGameHasEnded,
         showModal,
         setShowModal,
+        setEnemy,
+        setGameHasStarted,
+        enemyName,
+        setEnemyName,
+        canInput,
+        setCanInput,
+        setChallengerRoom,
     } = useContext(GameContext);
 
-    // const [gameHasEnded, setGameHasEnded] = React.useState(false);
     const [winner, setWinner] = React.useState<PossibleValue | undefined>();
 
     const socket = useContext(SocketContext);
-    // const [showModal, setShowModal] = React.useState<boolean>(false);
     const [challengeMessage, setChallengeMessage] = React.useState<string>('');
-    const [challengerRoom, setChallengerRoom] = React.useState<string>('');
-    const [canInput, setCanInput] = React.useState<boolean>(false);
-    const [enemy, setEnemy] = React.useState('');
     const [displayGrid, setDisplayGrid] = React.useState<boolean>(false);
-    const [gameHasStarted, setGameHasStarted] = React.useState<boolean>(false)
-    const [enemyName, setEnemyName] = React.useState<string>('');
 
     React.useEffect(() => {
         user && user.id && socket.emit('send-user-data', user);
@@ -55,7 +55,6 @@ const Grid = () => {
     }, [socket]);
 
     React.useEffect(() => {
-        // will assume that the challenger has the ability to start a game for now
         console.log('Game start');
         socket.on('gameStart', (challenged: string, challenger: string, gridArray: [], canStartGame: boolean) => {
             setDisplayGrid(true);
@@ -133,19 +132,19 @@ const Grid = () => {
                 }
                 <div className={styles.table}>
                     <div className={styles.row}>
-                        <Cell  enemyPlayer={enemy} id={0} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
-                        <Cell  enemyPlayer={enemy} id={1} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
-                        <Cell  enemyPlayer={enemy} id={2} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
+                        <Cell id={0} setGridValue={setGridValue}  />
+                        <Cell id={1} setGridValue={setGridValue}  />
+                        <Cell id={2} setGridValue={setGridValue}  />
                     </div>
                     <div className={styles.row}>
-                        <Cell  enemyPlayer={enemy} id={3} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
-                        <Cell  enemyPlayer={enemy} id={4} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
-                        <Cell  enemyPlayer={enemy} id={5} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
+                        <Cell id={3} setGridValue={setGridValue}  />
+                        <Cell id={4} setGridValue={setGridValue}  />
+                        <Cell id={5} setGridValue={setGridValue}  />
                     </div>
                     <div className={styles.row}>
-                        <Cell  enemyPlayer={enemy} id={6} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
-                        <Cell  enemyPlayer={enemy} id={7} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
-                        <Cell  enemyPlayer={enemy} id={8} canInput={canInput} setCanInput={setCanInput}  setGridValue={setGridValue}  />
+                        <Cell id={6} setGridValue={setGridValue}  />
+                        <Cell id={7} setGridValue={setGridValue}  />
+                        <Cell id={8} setGridValue={setGridValue}  />
                     </div>
                 </div>
                 {gameHasEnded &&
@@ -153,8 +152,8 @@ const Grid = () => {
                         Play again?
                     </button>}
             </div>}
-            <UsersList className='fixed' setEnemyName={setEnemyName} gameHasStarted={gameHasStarted} />
-            {showModal && <Modal message={challengeMessage} room={challengerRoom} />}
+            <UsersList className='fixed' />
+            {showModal && <Modal message={challengeMessage} />}
         </>
 
     )

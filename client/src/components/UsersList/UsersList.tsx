@@ -8,18 +8,17 @@ import { GameContext } from "../../context/gameContext";
 interface UserListProps {
     setEnemyName?: any;
     className: string;
-    gameHasStarted?: boolean;
 }
 
 const UsersList = (props: UserListProps) => {
     const {
         className,
-        setEnemyName,
-        gameHasStarted,
     } = props;
 
     const {
         showModal,
+        gameHasStarted,
+        setEnemyName,
     } = useContext(GameContext);
 
     const [usersList, setUsersList] = React.useState([]);

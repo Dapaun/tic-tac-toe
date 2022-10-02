@@ -8,16 +8,12 @@ interface GameContextProps {
     setGridArray: any;
     gameHasEnded: any;
     setGameHasEnded: any;
-    // winner: any;
-    // setWinner: any;
     showModal: any;
     setShowModal: any;
     canInput: any;
     setCanInput: any;
     enemy: any;
     setEnemy: any;
-    displayGrid: any;
-    setDisplayGrid: any;
     gameHasStarted: any;
     setGameHasStarted: any;
     enemyName: any;
@@ -51,16 +47,12 @@ const GameContextProvider = (props: any) => {
         setGridArray,
         gameHasEnded,
         setGameHasEnded,
-        // winner,
-        // setWinner,
         showModal,
         setShowModal,
         canInput,
         setCanInput,
         enemy,
         setEnemy,
-        displayGrid,
-        setDisplayGrid,
         gameHasStarted,
         setGameHasStarted,
         enemyName,
