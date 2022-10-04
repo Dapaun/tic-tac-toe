@@ -1,6 +1,7 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import { SiOpsgenie } from 'react-icons/si';
+import styles from './TopBar.module.scss';
 
 const TopBar = () => {
     const userContext = useContext(UserContext);
@@ -8,18 +9,33 @@ const TopBar = () => {
         isAuthenticated,
         user,
     } = userContext;
-    console.log(user);
+    const [displayUserPopup, setDisplayPopup] = React.useState(false);
+
+    const handleClick = () => {
+        setDisplayPopup(!displayUserPopup);
+    };
+
     return (
-        <div className="w-full h-20 bg-slate-600 flex justify-between">
-            <p className="text-white my-auto ml-5 text-lg cursor-default">Tic Tac Toe</p>
-            {isAuthenticated && user && <button className="text-white h-full px-5 my-auto text-lg hover:bg-slate-400 transition duration-1000">
-                <div className="flex">
-                    <div  className="mt-1 mr-1" >
-                        <SiOpsgenie/>
+        <div className={styles.topBarWrapper}>
+            <p className={styles.gameNameText}>Tic Tac Toe</p>
+            {isAuthenticated && user &&
+                <button className={styles.userNameButton} onClick={handleClick}>
+                    <div className="flex">
+                        <div className="mt-1 mr-1" >
+                            <SiOpsgenie />
+                        </div>
+                        {user.firstName} {user.lastName}
                     </div>
-                    {user.firstName} {user.lastName}
-                </div>
-            </button>}
+                </button>}
+            {displayUserPopup &&
+                <div className={styles.userNameButtonPopup}>
+                    <div className="border-b-2 border-b-white cursor-pointer pb-2">
+                        Log out
+                    </div>
+                    <div className="cursor-pointer mt-2">
+                        Change details
+                    </div>
+                </div>}
         </div>
     )
 }
