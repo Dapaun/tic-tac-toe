@@ -1,7 +1,19 @@
-.formContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    min-height: 100vh;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .formContainer {
+        @apply h-56 w-64 m-auto mt-40 p-5 text-left leading-5 scale-150;
+    }
+    .label {
+        @apply mb-1 block;
+    }
+    .input {
+        @apply mb-2 block border-gray-500 border-2;
+    }
+    .loginButton {
+        @apply bg-slate-600 p-2 rounded text-white hover:bg-slate-400 hover:cursor-pointer transition duration-1000;
+    }
 }
+
+

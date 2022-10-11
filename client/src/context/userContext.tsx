@@ -5,6 +5,7 @@ interface UserContextProps {
     isAuthenticated: boolean;
     user: any;
     changeAuthenticationStatus: (user?: any) => void;
+    isLoading: boolean;
 }
 
 export const UserContext = React.createContext<UserContextProps>(undefined as any);
@@ -12,11 +13,12 @@ export const UserContext = React.createContext<UserContextProps>(undefined as an
 const UserContextProvider = (props: any) => {
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
     const [user, setUser] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(true);
+
     React.useEffect(()=> {
         const userId = localStorage.getItem('user');
         if(userId) {
           const body = JSON.stringify({ userId});
-
           axios.post(
               '/auth/userId',
               body,
@@ -38,8 +40,10 @@ const UserContextProvider = (props: any) => {
               .catch((e) => {
                   //TODO SHARE ERROR 
                   console.log(e);
-              })
+              });
           setIsAuthenticated(true);
+        } else {
+            setIsLoading(false);
         }
       }, []);
       const changeAuthenticationStatus = (user ?: any) => {
@@ -48,7 +52,7 @@ const UserContextProvider = (props: any) => {
         user && localStorage.setItem('user', user.id);
       };
       return (
-        <UserContext.Provider value={{isAuthenticated, user, changeAuthenticationStatus}}>
+        <UserContext.Provider value={{isAuthenticated, user, changeAuthenticationStatus, isLoading}}>
             {props.children}
         </UserContext.Provider>
     );

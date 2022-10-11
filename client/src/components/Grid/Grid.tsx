@@ -6,6 +6,7 @@ import { SocketContext } from "../../context/socketContext";
 import UsersList from "../UsersList/UsersList";
 import Modal from "../Modal/Modal";
 import { GameContext } from "../../context/gameContext";
+import { useNavigate } from "react-router-dom";
 
 export enum PossibleValue {
     x = 'X',
@@ -14,7 +15,9 @@ export enum PossibleValue {
 
 const Grid = () => {
     const {
-        user
+        user,
+        isAuthenticated,
+        isLoading,
     } = useContext(UserContext);
 
     const {
@@ -40,6 +43,19 @@ const Grid = () => {
     const socket = useContext(SocketContext);
     const [challengeMessage, setChallengeMessage] = React.useState<string>('');
     const [displayGrid, setDisplayGrid] = React.useState<boolean>(false);
+
+    const navigate = useNavigate();
+
+    console.log('-------');
+    console.log('isAuthenticated ', isAuthenticated);
+    console.log('User ', user);
+    console.log('IsLoading ', isLoading);
+
+    React.useEffect(() => {
+        if (!isLoading && !isAuthenticated) {
+            navigate('/login');
+        }
+    }, [isAuthenticated, isLoading, navigate]);
 
     React.useEffect(() => {
         user && user.id && socket.emit('send-user-data', user);

@@ -9,7 +9,17 @@ const LoginPage = () => {
     const [password, setPassword] = React.useState('');
     const body = JSON.stringify({ email, password });
     const navigate = useNavigate();
-    const { changeAuthenticationStatus } = React.useContext(UserContext);
+    const {
+        changeAuthenticationStatus,
+        isAuthenticated,
+        isLoading,
+    } = React.useContext(UserContext);
+
+    React.useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/');
+        }
+    }, [isAuthenticated, navigate]);
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -45,17 +55,19 @@ const LoginPage = () => {
     }
 
     return (
-        <form className={styles.formContainer} onSubmit={handleSubmit}>
-            <label>Email</label>
-            <br></br>
-            <input type="text" value={email} onChange={handleEmailChange} />
-            <br></br>
-            <label>Password</label>
-            <br></br>
-            <input type="password" value={password} onChange={handlePasswordChange} />
-            <br></br>
-            <input type="submit" value="Login" />
-        </form>
+        <>
+           {!isLoading && <form className={styles.formContainer} onSubmit={handleSubmit}>
+                <label className={styles.label}>Email</label>
+                <br></br>
+                <input className={styles.input} type="text" value={email} onChange={handleEmailChange} />
+                <br></br>
+                <label className={styles.label}>Password</label>
+                <br></br>
+                <input className={styles.input} type="password" value={password} onChange={handlePasswordChange} />
+                <br></br>
+                <input className={styles.loginButton} type="submit" value="Login" />
+            </form>}
+        </>
     )
 
 }
