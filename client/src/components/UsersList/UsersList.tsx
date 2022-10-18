@@ -5,15 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './UsersList.module.scss';
 import { GameContext } from "../../context/gameContext";
 
-interface UserListProps {
-    setEnemyName?: any;
-    className: string;
-}
-
-const UsersList = (props: UserListProps) => {
-    const {
-        className,
-    } = props;
+const UsersList = () => {
 
     const {
         showModal,
@@ -40,15 +32,13 @@ const UsersList = (props: UserListProps) => {
         });
     }, [socket, navigate]);
 
-    
+
     React.useEffect(() => {
         socket.on('gameStart', () => {
             setTimer(undefined);
         });
     }, [socket]);
 
-    console.log('local user ', user);
-    console.log('Users list ', usersList);
     const handleChallenge = (userData: any) => {
         setEnemyName(userData.user.firstName + userData.user.lastName);
         setTimer(10);
@@ -66,28 +56,127 @@ const UsersList = (props: UserListProps) => {
         return () => clearInterval(interval);
     }, [timer]);
 
-    return (
-        <div className={styles[className]}>
-            <h3>Online users</h3>
-            <div className={styles.listWrapper}>
-                {usersList.map((userData: any) =>
-                    user && user.id !== userData.user.id &&
-                    <div className={styles.userListWrapper}>
-                        <p className={styles.userName}>{userData.user.firstName} {userData.user.lastName}</p>
-                        {(!showModal && !gameHasStarted) && <button disabled={!!timer} className={styles.challengeButton} onClick={() => handleChallenge(userData)}>
-                            Challenge!
-                        </button>}
-                        {!!timer && 
-                        <p className={styles.timerMessage}>
-                            The challenge will expire in {timer} seconds
-                        </p>}
-                    </div>
-                )}
-            </div>
+    let mockList = [{
+        socketId: '1',
+        user: {
+            id: '1',
+            firstName: 'Test',
+            lastName: 'Test'
+        }
+    },
+    {
+        socketId: '2',
+        user: {
+            id: '2',
+            firstName: 'Test2',
+            lastName: 'Test2'
+        }
+    },
+    {
+        socketId: '3',
+        user: {
+            id: '3',
+            firstName: 'Test3',
+            lastName: 'Test3'
+        }
+    },
+    {
+        socketId: '42',
+        user: {
+            id: '42',
+            firstName: 'Test42',
+            lastName: 'Test42'
+        }
+    },
+    {
+        socketId: '1',
+        user: {
+            id: '1',
+            firstName: 'Test',
+            lastName: 'Test'
+        }
+    },
+    {
+        socketId: '2',
+        user: {
+            id: '2',
+            firstName: 'Test2',
+            lastName: 'Test2'
+        }
+    },
+    {
+        socketId: '3',
+        user: {
+            id: '3',
+            firstName: 'Test3',
+            lastName: 'Test3'
+        }
+    },
+    {
+        socketId: '42',
+        user: {
+            id: '42',
+            firstName: 'Test42',
+            lastName: 'Test42'
+        }
+    },
+    {
+        socketId: '1',
+        user: {
+            id: '1',
+            firstName: 'Test',
+            lastName: 'Test'
+        }
+    },
+    {
+        socketId: '2',
+        user: {
+            id: '2',
+            firstName: 'Test2',
+            lastName: 'Test2'
+        }
+    },
+    {
+        socketId: '3',
+        user: {
+            id: '3',
+            firstName: 'Test3',
+            lastName: 'Test3'
+        }
+    },
+    {
+        socketId: '42',
+        user: {
+            id: '42',
+            firstName: 'Test42',
+            lastName: 'Test42'
+        }
+    },
+    ];
+    // WIll use newlist to reporduce bugs
+    let newList = [...usersList, ...mockList];
 
-            <button onClick={() => navigate('/')}>
-                Go to grid
-            </button>
+    return (
+        <div className={styles.listWrapper}>
+            <div className="h-screen">
+                <h3 className={styles.listHeader}>Online users</h3>
+                <>
+                    {usersList.map((userData: any) =>
+                        user && user.id !== userData.user.id &&
+                        <div className={styles.listUserName}>
+                            <p className="text-base mb-1">{userData.user.firstName} {userData.user.lastName}</p>
+                            {(!showModal && !gameHasStarted) &&
+                                <button disabled={!!timer} className={styles.listApplyButton} onClick={() => handleChallenge(userData)}>
+                                    Challenge!
+                                </button>}
+                            {!!timer &&
+                                <p className={styles.timerMessage}>
+                                    The challenge will expire in {timer} seconds
+                                </p>}
+                        </div>
+                    )}
+                </>
+            </div>
         </div>
     )
 }

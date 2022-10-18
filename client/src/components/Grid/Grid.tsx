@@ -168,7 +168,7 @@ const Grid = () => {
                         Play again?
                     </button>}
             </div>}
-            <UsersList className='fixed' />
+            <UsersList />
             {showModal && <Modal message={challengeMessage} />}
         </>
 

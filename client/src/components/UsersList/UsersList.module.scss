@@ -1,46 +1,17 @@
-.fixed {
-    position: fixed;
-    top: 45%;
-    right: 5%;
-    min-width: 300px;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
     .listWrapper {
-        :last-child {
-            border-bottom: 1px solid;
-            padding-bottom: 20px;
-        }
+        @apply fixed right-0 w-80 overflow-y-scroll;
     }
-    .userListWrapper {
-        margin-top: 20px;
-        margin-bottom: 20px;
-        border-top: 1px solid;
-        .challengeButton {
-            padding: 4px;
-            border: none;
-            background: #86c686;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            &:hover {
-                transform: scale(2);
-                transition-duration: 1s;
-                transition-timing-function: ease;
-            }
-            &:disabled {
-                background: gray;
-                cursor: wait;
-            }
-        }
-        .userName {
-            width: 200px;
-            overflow-wrap: anywhere;
-            margin: 0 auto;
-            display: block;
-            margin-bottom: 15px;
-        }
-        .timerMessage {
-            border-bottom: none;
-        }
-
+    .listHeader {
+        @apply text-lg border-b-2 border-b-slate-400;
     }
-
+    .listUserName {
+        @apply border-b-2 p-2 border-b-slate-400;
+    }
+    .listApplyButton {
+        @apply bg-green-500 p-1 rounded hover:bg-green-300 text-white transition duration-1000 disabled:cursor-wait disabled:bg-green-300;
+    }
 }
