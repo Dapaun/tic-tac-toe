@@ -6,12 +6,15 @@ import { GameContext } from '../../context/gameContext';
 
 interface ModalProps {
     message: string;
+    setShowModal: any;
 }
 
 const Modal = (props: ModalProps) => {
     const {
         message,
+        setShowModal,
     } = props;
+
     const [timer, setTimer] = React.useState<number | undefined>(10);
     const socket = useContext(SocketContext);
     const {
@@ -25,12 +28,14 @@ const Modal = (props: ModalProps) => {
 
         if (timer && timer <= 0) {
             setTimer(undefined);
+            setShowModal(false);
         }
         return () => clearInterval(interval);
     }, [timer]);
 
     const handleDecilne = () => {
         setTimer(undefined);
+        setShowModal(false);
     }
 
     const handleAccept = () => {

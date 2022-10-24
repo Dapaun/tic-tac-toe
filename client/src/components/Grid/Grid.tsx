@@ -27,8 +27,6 @@ const Grid = () => {
         setGridArray,
         gameHasEnded,
         setGameHasEnded,
-        showModal,
-        setShowModal,
         setEnemy,
         setGameHasStarted,
         enemyName,
@@ -39,6 +37,7 @@ const Grid = () => {
     } = useContext(GameContext);
 
     const [winner, setWinner] = React.useState<PossibleValue | undefined>();
+    const [showModal, setShowModal] = React.useState(false);
 
     const socket = useContext(SocketContext);
     const [challengeMessage, setChallengeMessage] = React.useState<string>('');
@@ -63,13 +62,13 @@ const Grid = () => {
 
     React.useEffect(() => {
         socket.on('challenged', (message: string, challangerUserRoom: string, challengerName: string) => {
+            console.log('Challenged here');
             setChallengeMessage(message);
             setChallengerRoom(challangerUserRoom);
             setShowModal(true);
             setEnemyName(challengerName);
         })
     }, [socket]);
-
     React.useEffect(() => {
         console.log('Game start');
         socket.on('gameStart', (challenged: string, challenger: string, gridArray: [], canStartGame: boolean) => {
@@ -168,8 +167,8 @@ const Grid = () => {
                         Play again?
                     </button>}
             </div>}
-            <UsersList />
-            {showModal && <Modal message={challengeMessage} />}
+            <UsersList showModal={showModal} />
+            {showModal && <Modal message={challengeMessage} setShowModal={setShowModal}/>}
         </>
 
     )

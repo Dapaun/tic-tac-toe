@@ -1,0 +1,11 @@
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .listUserName {
+        @apply border-b-2 p-2 border-b-slate-400;
+    }
+    .listApplyButton {
+        @apply bg-green-500 p-1 rounded hover:bg-green-300 text-white transition duration-1000 disabled:cursor-wait disabled:bg-green-300;
+    }
+}

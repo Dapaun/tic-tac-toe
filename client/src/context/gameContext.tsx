@@ -30,11 +30,9 @@ const GameContextProvider = (props: any) => {
     const [nextValue, setNextValue] = React.useState<PossibleValue>(PossibleValue.x);
     const [gridArray, setGridArray] = React.useState(['', '', '', '', '', '', '', '', '']);
     const [gameHasEnded, setGameHasEnded] = React.useState(false);
-    // const [winner, setWinner] = React.useState<PossibleValue | undefined>();
     const [showModal, setShowModal] = React.useState<boolean>(false);
     const [canInput, setCanInput] = React.useState<boolean>(false);
     const [enemy, setEnemy] = React.useState('');
-    const [displayGrid, setDisplayGrid] = React.useState<boolean>(false);
     const [gameHasStarted, setGameHasStarted] = React.useState<boolean>(false)
     const [enemyName, setEnemyName] = React.useState<string>('');
     const [challengerRoom, setChallengerRoom] = React.useState<string>('');
