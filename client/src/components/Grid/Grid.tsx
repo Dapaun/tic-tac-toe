@@ -7,6 +7,7 @@ import UsersList from "../UsersList/UsersList";
 import Modal from "../Modal/Modal";
 import { GameContext } from "../../context/gameContext";
 import { useNavigate } from "react-router-dom";
+import Carousel from "../Carousel/Carousel";
 
 export enum PossibleValue {
     x = 'X',
@@ -167,6 +168,9 @@ const Grid = () => {
                         Play again?
                     </button>}
             </div>}
+            {
+                !displayGrid && <Carousel />
+            }
             <UsersList showModal={showModal} />
             {showModal && <Modal message={challengeMessage} setShowModal={setShowModal}/>}
         </>
