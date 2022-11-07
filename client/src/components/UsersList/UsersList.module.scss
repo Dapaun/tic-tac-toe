@@ -3,10 +3,10 @@
 
 @layer components {
     .listWrapper {
-        @apply fixed right-0 w-80 overflow-y-scroll;
+        @apply w-80 m-auto mt-10;
     }
     .listHeader {
-        @apply text-lg border-b-2 border-b-slate-400;
+        @apply text-2xl border-b-2 border-b-slate-400 pb-5;
     }
     .listUserName {
         @apply border-b-2 p-2 border-b-slate-400;

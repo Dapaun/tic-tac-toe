@@ -29,15 +29,15 @@ const Carousel = () => {
             }
         }
         setSlideClassesArray(newArray);
-    }, [activeSlide]) 
+    }, [activeSlide])
 
     return (
-        <div className="w-8/12 p-6 absolute ml-7">
+        <div className="w-8/12 p-6 m-auto">
             {/* <img src="https://media.giphy.com/media/qAWWpdxRzQCFEVGbiJ/giphy.gif" alt="" className="w-32" /> */}
-            <h1 className="text-lg mb-4">A brief history of Tic Tac Toe</h1>
+            <h1 className="text-lg mb-4">There are no online users... <br></br>Here is a brief history of Tic Tac Toe</h1>
             <div>
                 <div className="h-[460px] flex">
-                    <div className={slideClassesArray[1]}>
+                    <div className={slideClassesArray[0]}>
                         <img
                             className="w-96 m-auto rounded h-56"
                             alt=""
@@ -48,10 +48,10 @@ const Carousel = () => {
                             An early variation of tic-tac-toe was played in the Roman Empire, around the first century BC.
                             It was called terni lapilli (three pebbles at a time) and instead of having any number of pieces,
                             each player had only three; thus, they had to move them around to empty spaces to keep playing.
-                            The game's grid markings have been found chalked all over Rome. 
+                            The game's grid markings have been found chalked all over Rome.
                         </p>
                     </div>
-                    <div className={slideClassesArray[2]}>
+                    <div className={slideClassesArray[1]}>
                         <img
                             className="w-96 m-auto rounded h-56"
                             alt=""
@@ -63,10 +63,10 @@ const Carousel = () => {
                             and Queries. The first print reference to a game called "tick-tack-toe" occurred in 1884, but referred to
                             "a children's game played on a slate, consisting of trying with the eyes shut to bring the pencil down on
                             one of the numbers of a set, the number hit being scored". "Tic-tac-toe" may also derive from "tick-tack",
-                            the name of an old version of backgammon first described in 1558. 
+                            the name of an old version of backgammon first described in 1558.
                         </p>
                     </div>
-                    <div className={slideClassesArray[0]}>
+                    <div className={slideClassesArray[2]}>
                         <img
                             className="w-96 m-auto rounded h-56"
                             alt=""
@@ -84,13 +84,13 @@ const Carousel = () => {
                 </div>
                 <div className="flex justify-between w-80 m-auto">
                     <button
-                    onClick={handleBack}
-                    className="bg-slate-500 p-2 cursor-pointer text-white rounded">
+                        onClick={handleBack}
+                        className="bg-slate-500 p-2 cursor-pointer text-white rounded">
                         Back
                     </button>
                     <button
-                    onClick={handleNext} 
-                    className="bg-slate-500 p-2 cursor-pointer text-white rounded">
+                        onClick={handleNext}
+                        className="bg-slate-500 p-2 cursor-pointer text-white rounded">
                         Next
                     </button>
                 </div>

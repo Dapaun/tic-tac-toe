@@ -4,16 +4,20 @@ import { UserContext } from "../../context/userContext";
 import { useNavigate } from 'react-router-dom';
 import styles from './UsersList.module.scss';
 import UserListComponent from "../UserListComponent/UserListComponent";
+import Carousel from "../Carousel/Carousel";
 
 interface UsersListInterface {
     showModal: boolean;
+    displayGrid: boolean;
 }
 
 const UsersList = (props: UsersListInterface) => {
     const {
         showModal,
+        displayGrid,
     } = props;
     const [usersList, setUsersList] = React.useState([]);
+    const [isGettingList, setIsGettingList] = React.useState(true);
     const socket = useContext(SocketContext);
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
@@ -30,6 +34,14 @@ const UsersList = (props: UsersListInterface) => {
             setUsersList(data);
         });
     }, [socket, navigate]);
+
+    React.useEffect(() => {
+        console.log('Gets here ', usersList);
+        if (isGettingList === true && usersList.length > 0) {
+            console.log('Set user list ', usersList);
+            setIsGettingList(false);
+        }
+    }, [usersList, isGettingList])
 
 
     let mockList = [{
@@ -132,19 +144,22 @@ const UsersList = (props: UsersListInterface) => {
     // WIll use newlist to reporduce bugs
     let newList = [...usersList, ...mockList];
 
+    const shouldDisplayCarousel = !displayGrid && !isGettingList && usersList.length === 1;
+
     return (
-       <>
-       {usersList.length > 1 && <div className={styles.listWrapper}>
-            <div className="h-screen">
-                <h3 className={styles.listHeader}>Online users</h3>
-                <>
-                    {usersList.map((userData: any) =>
-                        user && user.id !== userData.user.id &&
-                        <UserListComponent userData={userData} showModal={showModal}/>
-                    )}
-                </>
-            </div>
-        </div>}
+        <>
+            {usersList.length > 1 && <div className={styles.listWrapper}>
+                <div className="mb-10">
+                    <h3 className={styles.listHeader}>Online users</h3>
+                    <>
+                        {usersList.map((userData: any) =>
+                            user && user.id !== userData.user.id &&
+                            <UserListComponent userData={userData} showModal={showModal} />
+                        )}
+                    </>
+                </div>
+            </div>}
+            {shouldDisplayCarousel && <Carousel />}
         </>
     )
 }
