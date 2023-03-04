@@ -159,7 +159,7 @@ const Grid = () => {
                 </div>
                 {gameHasEnded &&
                     <button className={styles.playAgainButton} onClick={handleTryAgain}>
-                        Play again?
+                        Go back
                     </button>}
             </div>}
 
